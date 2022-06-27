@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.springboot.Dao.BookDao">
+    <insert id="insert" parameterType="com.springboot.Domain.Book">
+	    insert into
+	    tbl_book (name, type, description)
+	    values (#{name}, #{type}, #{description})
+    </insert>
+
+    <delete id="delete" parameterType="Integer">
+	    delete from
+	    tbl_book
+	    where id=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.springboot.Domain.Book">
+	    update
+	    tbl_book
+	    set name = #{name},type = #{type},description=#{description}
+	    where id=#{id}
+    </update>
+
+    <select id="selectById" parameterType="Integer" resultType="com.springboot.Domain.Book">
+        select id, name, type,description
+        from tbl_book
+        where id=#{id}
+    </select>
+
+    <select id="selectAll" resultType="com.springboot.Domain.Book">
+        select * from tbl_book
+    </select>
+
+</mapper>

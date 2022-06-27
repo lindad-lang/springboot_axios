@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+</head>
+<body>
+<div id="app">
+    <input type="button" value="查询全部" v-on:click="showAll()" >
+    <div>
+        <input type="button" value="查询单个" v-on:click="showById()" >
+        <input type="text" v-model="id_text_show" ><br>
+    </div>
+    <div>
+        <input type="button" value="删除单个" v-on:click="deleteById()" >
+        <input type="text" v-model="id_text_delete" ><br>
+    </div>
+    <div>
+        <input type="button" value="添加" v-on:click="insert()" >
+        <input type="text" v-model="insert_name">
+        <input type="text" v-model="insert_type">
+        <input type="text" v-model="insert_description"><br>
+    </div>
+    <div>
+        <input type="button" value="修改" v-on:click="update()" >
+        <input type="text" v-model="update_id">
+        <input type="text" v-model="update_name">
+        <input type="text" v-model="update_type">
+        <input type="text" v-model="update_description"><br>
+    </div>
+    <div>
+        <div v-for="items in datalist">{{items.id}}--{{items.name}}--{{items.type}}--{{items.description}}</div>
+    </div>
+</div>
+<script src="../js/axios-0.18.0.js"></script>
+<script src="../js/vue.js"></script>
+<!--<script type="text/javascript" src="../js/jquery.min.js"></script>-->
+<script>
+
+
+   var vm = new Vue({
+        el:"#app",
+        data(){
+            return{
+                id_text_show:"",
+                id_text_delete:"",
+                // url:"",
+                datalist:[],
+
+                insert_name:"",
+                insert_type:"",
+                insert_description:"",
+
+                update_id:"",
+                update_name:"",
+                update_type:"",
+                update_description:""
+            }
+        },
+        methods:{
+            showAll(){
+                axios({
+                    method: 'get',
+                    url: "http://localhost:9999/selectAll"
+                }).then((result) => {
+                    var len = result.data.data.length;
+                    for (let i = 0; i < len; i++) {
+                        vm.datalist.push(result.data.data[i])
+                    }
+                    console.log(vm.datalist[9]);
+
+                }).catch(error => {
+
+                })
+            },
+
+            showById(){
+                axios({
+                    method: 'get',
+                    url: "http://localhost:9999/selectById/"+vm.id_text_show
+
+                }).then((result) => {
+
+                    console.log(vm.id_text_show);
+                    vm.datalist.push(result.data.data)
+                    console.log(result.data.data);
+                }).catch(error => {
+                    alert("buchcheng");
+                    console.log(error);
+                })
+            },
+            deleteById(){
+                axios({
+                    method: 'delete',
+                    url: "http://localhost:9999/delete/"+vm.id_text_delete
+
+                }).then((result) => {
+
+                    console.log(vm.id_text_delete);
+                    //vm.datalist.push("delete finished")
+                   // console.log(result.data.data);
+                }).catch(error => {
+                    alert("buchcheng");
+                    console.log(error);
+                })
+            },
+
+            insert(){
+                axios({
+                    method:"post",
+                    url:"http://localhost:9999/insert",
+
+                    //参数列表。data表示参数设置在请求体中，params设置在请求头中
+                    data: {
+                        name: vm.insert_name,
+                        type: vm.insert_type,
+                        description: vm.insert_description
+                    }
+
+                }).then((result) => {
+
+                    console.log(vm.insert_name);
+                    console.log(vm.insert_type);
+                    console.log(vm.insert_description);
+                    //vm.datalist.push("delete finished")
+                    // console.log(result.data.data);
+                }).catch(error => {
+                    alert("buchcheng");
+                    console.log(error);
+                })
+            },
+
+            update(){
+                axios({
+                    method:"put",
+                    url:"http://localhost:9999/update",
+
+                    //参数列表。data表示参数设置在请求体中，params设置在请求头中
+                    data: {
+                        id:vm.update_id,
+                        name: vm.update_name,
+                        type: vm.update_type,
+                        description: vm.update_description
+                    }
+
+                }).then((result) => {
+
+                    console.log(vm.update_id);
+                    console.log(vm.update_name);
+                    console.log(vm.update_type);
+                    console.log(vm.update_description);
+                    //vm.datalist.push("delete finished")
+                    // console.log(result.data.data);
+                }).catch(error => {
+                    alert("buchcheng");
+                    console.log(error);
+                })
+            },
+        }
+
+    });
+</script>
+
+</body>
+
+</html>
